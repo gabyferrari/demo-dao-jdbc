@@ -1,5 +1,6 @@
 package model.dao;
 
+import db.DB;
 import model.dao.impl.SellerDaoJDBC;
 
 public class DaoFactory {
@@ -8,7 +9,7 @@ public class DaoFactory {
 	//tem operaçoes estaticas para a instanciaçao
 	
 	public static SellerDao createSellerDao() { //expoe um metodo q retorna o tipo da interface
-		return new SellerDaoJDBC(); //mas q internamente ele instancia uma implementaçao
+		return new SellerDaoJDBC(DB.getConnection()); //mas q internamente ele instancia uma implementaçao
 	}
 
 }
