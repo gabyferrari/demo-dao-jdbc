@@ -58,19 +58,11 @@ public class SellerDaoJDBC implements SellerDao {
 			rs = st.executeQuery();
 			if (rs.next()) { //testar se veio algum resultado, se minha consulta n retornou nenhum registro esse rs.next vai dar falso
 				
-				Department dep = new Department(); //se der verdadeiro vai imprimir os dados normal
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
-				
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setDepartment(dep);
-				
+				//se der verdadeiro vai imprimir os dados normal
+				Department dep = instantiateDepartment(rs);
+				Seller obj = instantiateSeller(rs, dep);
 				return obj;
+				
 			}
 			return null; //ent o pula o if e retorna nulo, ou seja n existia nenhum vendedor com esse id
 		}
@@ -81,6 +73,24 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department(); 
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
